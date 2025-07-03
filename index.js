@@ -24,3 +24,10 @@ async function playEska24_7(guild) {
     console.error('Błąd autoodtwarzania:', error);
    }
 }
+client.once('ready', async () => {
+  console.log('Bot gotowy!');
+  const guild = client.guilds.cache.first();
+  if (guild) {
+    await playEska24_7(guild);
+  }
+});
