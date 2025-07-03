@@ -31,3 +31,23 @@ client.once('ready', async () => {
     await playEska24_7(guild);
   }
 });
+client.on('messageCreate', async message => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(config.prefix)) return;
+  const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+  if (command === 'eska') {
+    const voiceChannel = message.member.voice.channel;
+    if (!voiceChannel) return message.reply('Wejdź najpierw na kanał głosowy!');
+    const connection = joinVoiceChannel({
+      channelId: voiceChannel.id,
+      guildId: message.guild.id,
+      adapterCreator: message.guild.voiceAdapterCreator,
+    });
+    const player = createAudioPlayer();
+    const resource = createAudioResource(config.autoPlayUrl);
+    connection.subscribe(player);
+    player.play(resource);
+    message.reply('🔊 Gram radio Eska!');
+  }
+});
