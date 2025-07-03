@@ -1,38 +1,24 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
-
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
+const config = require('../config.json');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('eska')
-    .setDescription('Odtwarza radio ESKA na kanale głosowym'),
-
+    .setDescription('Gra radio Eska'),
   async execute(interaction) {
     const voiceChannel = interaction.member.voice.channel;
-
     if (!voiceChannel) {
-      return interaction.reply({ content: '❗ Musisz być na kanale głosowym!', ephemeral: true });
+      return interaction.reply({ content: 'Wejdź najpierw na kanał głosowy!', ephemeral: true });
     }
-
     const connection = joinVoiceChannel({
       channelId: voiceChannel.id,
       guildId: interaction.guild.id,
       adapterCreator: interaction.guild.voiceAdapterCreator,
     });
-
     const player = createAudioPlayer();
-    const resource = createAudioResource('http://n-04.eska.pl/eska48.aac');
-
-    player.play(resource);
+    const resource = createAudioResource(config.autoPlayUrl);
     connection.subscribe(player);
-
-    player.on(AudioPlayerStatus.Playing, () => {
-      console.log('🎧 Radio ESKA gra!');
-    });
-
-    player.on('error', error => {
-      console.error(`Błąd: ${error.message}`);
-    });
-
-    await interaction.reply('▶️ Odtwarzam **Radio ESKA**!');
+    player.play(resource);
+    await interaction.reply('🔊 Gram radio Eska!');
   },
 };
