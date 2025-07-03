@@ -25,3 +25,8 @@ module.exports = {
     }
   ]
 }
+{
+  ...
+  "autoVoiceChannelId": "1355831570946330716",
+  "autoPlayUrl": "http://n-04.eska.pl/eska48.aac"
+}
